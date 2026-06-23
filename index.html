@@ -161,7 +161,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 24px 24px 16px;
+      padding: 24px 24px 8px;
       z-index: 10;
       overflow: hidden;
     }
@@ -210,6 +210,24 @@
       display: block;
       flex-shrink: 0;
       cursor: pointer;
+    }
+
+    .hero-info-btn {
+      position: absolute;
+      top: 24px;
+      right: 24px;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: white;
+      border: none;
+      padding: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      z-index: 2;
+      flex-shrink: 0;
     }
 
     /* ─── Buttons ────────────────────────────────────────────────────── */
@@ -325,6 +343,57 @@
 
     /* ─── Placeholder page body ──────────────────────────────────────── */
     .placeholder-body { padding: 0 24px 162px; }
+
+    /* ─── Radio groups ───────────────────────────────────────────────── */
+    .radio-section {
+      padding: 24px 24px 158px;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+    .radio-group {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .radio-group__options {
+      display: flex;
+      gap: 32px;
+    }
+    .radio-option {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+    }
+    .radio-option__circle {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      border: 1px solid var(--color-black);
+      background: transparent;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .radio-option--selected .radio-option__circle {
+      background: var(--color-black);
+      border-color: var(--color-black);
+    }
+    .radio-option--selected .radio-option__circle::after {
+      content: '';
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: white;
+    }
+    .radio-option--disabled .radio-option__circle {
+      border-color: rgba(0,0,0,0.4);
+      background: rgba(0,0,0,0.1);
+    }
+    .radio-option__label { color: var(--color-black); }
+    .radio-option--disabled .radio-option__label { color: rgba(0,0,0,0.4); }
 
     /* ─── Form ───────────────────────────────────────────────────────── */
     .form-body {
@@ -745,7 +814,31 @@
         </div>
         <img class="hero-img" src="assets/door-polar-white.png" alt="Schindler X8 elevator" />
       </div>
-      <div class="placeholder-body"></div>
+      <div class="option-list">
+        <div class="option">
+          <div class="option-inner option-inner--selected">
+            <div class="option-text">
+              <span class="typo-h4">No mirror</span>
+            </div>
+          </div>
+        </div>
+        <div class="option">
+          <div class="option-inner">
+            <div class="option-text">
+              <span class="typo-h4">Half height mirror</span>
+              <span class="typo-body">+ CHF 300</span>
+            </div>
+          </div>
+        </div>
+        <div class="option">
+          <div class="option-inner">
+            <div class="option-text">
+              <span class="typo-h4">Full height mirror</span>
+              <span class="typo-body">+ CHF 500</span>
+            </div>
+          </div>
+        </div>
+      </div>
     </section>
 
     <!-- ── Page 5: Step 5 — Complete your Technical details ──────── -->
@@ -779,9 +872,58 @@
             </svg>
           </div>
         </div>
-        <img class="hero-img" src="assets/door-polar-white.png" alt="Schindler X8 elevator" />
+        <img class="hero-img" src="assets/technical-details.png" alt="Technical details" />
+        <button class="hero-info-btn" aria-label="Info">
+          <img src="assets/icons/info.svg" width="24" height="24" alt="" />
+        </button>
       </div>
-      <div class="placeholder-body"></div>
+      <div class="option-list" style="padding-bottom: 0;">
+        <div class="option">
+          <div class="option-inner option-inner--selected">
+            <div class="option-text">
+              <span class="typo-h4">6 People</span>
+              <span class="typo-body">Car load 480 kg</span>
+            </div>
+          </div>
+        </div>
+        <div class="option">
+          <div class="option-inner">
+            <div class="option-text">
+              <span class="typo-h4">8 People</span>
+              <span class="typo-body">Car load 630 kg</span>
+              <span class="typo-body">+ CHF 3'000</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="radio-section">
+        <div class="radio-group">
+          <span class="typo-label">Landing door width</span>
+          <div class="radio-group__options">
+            <div class="radio-option radio-option--selected">
+              <div class="radio-option__circle"></div>
+              <span class="radio-option__label typo-body">800mm</span>
+            </div>
+            <div class="radio-option radio-option--disabled">
+              <div class="radio-option__circle"></div>
+              <span class="radio-option__label typo-body">900mm</span>
+            </div>
+          </div>
+        </div>
+        <div class="radio-group">
+          <span class="typo-label">Landing door height</span>
+          <div class="radio-group__options">
+            <div class="radio-option radio-option--selected">
+              <div class="radio-option__circle"></div>
+              <span class="radio-option__label typo-body">2000mm</span>
+            </div>
+            <div class="radio-option">
+              <div class="radio-option__circle"></div>
+              <span class="radio-option__label typo-body">2100mm</span>
+            </div>
+          </div>
+        </div>
+      </div>
     </section>
 
     <!-- ── Page 6: Summary ────────────────────────────────────────── -->
