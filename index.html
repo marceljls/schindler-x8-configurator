@@ -16,22 +16,22 @@
       src: url('assets/fonts/FrutigerNextPro-Light.otf') format('opentype');
       font-weight: 300;
       font-style: normal;
+      font-display: block;
+      ascent-override: 82.5%;
+      descent-override: 17.5%;
     }
-
     @font-face {
       font-family: 'Frutiger Next Pro';
       src: url('assets/fonts/FrutigerNextPro-Bold.otf') format('opentype');
       font-weight: 700;
       font-style: normal;
+      font-display: block;
+      ascent-override: 82.5%;
+      descent-override: 17.5%;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
-
-    html, body {
-      width: 100%;
-      min-height: 100%;
-      background: transparent;
-    }
+    html, body { width: 100%; min-height: 100%; background: transparent; }
 
     /* ─── Type scale (mobile variants only) ──────────────────────────── */
     .typo-title  { font-family: 'Frutiger Next Pro', sans-serif; font-weight: 300; font-size: 40px; line-height: 48px; }
@@ -50,7 +50,6 @@
       #app { display: none; }
       .desktop-notice { display: flex !important; }
     }
-
     .desktop-notice {
       display: none;
       position: fixed;
@@ -72,37 +71,16 @@
     }
 
     /* ─── Background ──────────────────────────────────────────────────── */
-    /*
-     * .app-bg is reusable:
-     *   - As the page background: position:fixed, covers the full viewport
-     *   - Inside the sticky nav: position:absolute, top:0, height:100dvh —
-     *     the nav's overflow:hidden clips it to the nav height,
-     *     showing the same top slice as the fixed page background.
-     */
     .app-bg {
       background: linear-gradient(161.59deg, #D3D1D1 1.996%, #E8E7E7 45.421%, #D3D1D1 96.605%);
       pointer-events: none;
       overflow: hidden;
     }
-
-    /* Page instance: fixed so it never scrolls, sits below app content */
     .app-bg--page {
       position: fixed;
       inset: 0;
       z-index: -1;
     }
-
-    /* Nav instance: absolute, full viewport height — clipped by nav overflow:hidden */
-    .app-bg--nav {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100dvh;
-      z-index: 0;
-    }
-
-    /* Hero instance: same full-viewport background, clipped to hero height by overflow:hidden */
     .app-bg--hero {
       position: absolute;
       top: 0;
@@ -112,12 +90,9 @@
       z-index: 0;
       opacity: 0;
     }
-
     .hero.is-sticky .app-bg--hero {
       opacity: 1;
     }
-
-    /* Blurred ellipse glow — same proportions in both instances */
     .app-bg__ellipse {
       position: absolute;
       width: 152%;
@@ -126,7 +101,6 @@
       transform: rotate(-6.76deg);
       transform-origin: center;
     }
-
     .app-bg__ellipse svg {
       display: block;
       width: 100%;
@@ -141,7 +115,6 @@
       overflow: hidden;
       z-index: 100;
     }
-
     .nav-inner {
       position: relative;
       z-index: 1;
@@ -150,12 +123,7 @@
       justify-content: space-between;
       padding: 16px 16px 16px 24px;
     }
-
-    .nav-logo {
-      height: 20px;
-      width: auto;
-    }
-
+    .nav-logo { height: 20px; width: auto; }
     .nav-menu-btn {
       width: 48px;
       height: 48px;
@@ -168,28 +136,20 @@
       flex-shrink: 0;
     }
 
+    /* ─── Multi-page system ───────────────────────────────────────────── */
+    .page { display: none; }
+    .page.is-active { display: block; }
+
     /* ─── Step header ────────────────────────────────────────────────── */
-    .step-header {
-      padding: 12px 24px 0;
-    }
-
-    .step-indicator {
-      display: flex;
-      gap: 16px;
-      margin-bottom: 24px;
-    }
-
+    .step-header { padding: 12px 24px 0; }
+    .step-indicator { display: flex; gap: 16px; margin-bottom: 24px; }
     .step-indicator__line {
       height: 1px;
       width: 38px;
       flex-shrink: 0;
-      background: rgba(0, 0, 0, 0.4);
+      background: rgba(0,0,0,0.4);
     }
-
-    .step-indicator__line--active {
-      background: #000;
-    }
-
+    .step-indicator__line--active { background: #000; }
     .step-header__sub  { color: #1a1a1a; }
     .step-header__title { color: #1a1a1a; }
 
@@ -198,49 +158,101 @@
       position: sticky;
       top: 0;
       width: 100%;
-      display: flex;
-      align-items: flex-end;
-      justify-content: center;
-      padding: 24px 24px 0;
-      z-index: 10;
-      overflow: hidden;
-    }
-
-    .hero-img {
-      position: relative;
-      z-index: 1;
-      width: 70%;
-      max-width: 280px;
-      height: auto;
-      display: block;
-      filter: drop-shadow(0 8px 24px rgba(0,0,0,0.18));
-    }
-
-    /* ─── Buttons ────────────────────────────────────────────────────── */
-    .btn-primary img {
-      filter: invert(1);
-    }
-
-    .btn-primary {
-      flex: 1;
+      height: 40dvh;
+      min-height: 328px;
       display: flex;
       align-items: center;
       justify-content: center;
+      padding: 24px;
+      z-index: 10;
+      overflow: hidden;
+    }
+    .hero-img {
+      position: relative;
+      z-index: 1;
+      height: 100%;
+      width: auto;
+      display: block;
+      object-fit: cover;
+      object-position: center;
+    }
+
+    .hero--split { align-items: stretch; justify-content: flex-start; }
+    .hero-split {
+      display: flex;
+      gap: 24px;
+      width: 100%;
+      height: 100%;
+      align-items: stretch;
+      position: relative;
+      z-index: 1;
+    }
+    .hero-split__main {
+      flex: 1;
+      min-width: 0;
+      display: block;
+      height: 100%;
+      width: auto;
+      object-fit: contain;
+      object-position: center bottom;
+    }
+    .hero-split__thumbs {
+      display: flex;
+      flex-direction: column;
       gap: 8px;
-      height: 52px;
+      flex-shrink: 0;
+    }
+    .hero-thumb {
+      width: 64px;
+      height: 64px;
+      border-radius: 4px;
+      border: 1px solid white;
+      object-fit: cover;
+      display: block;
+      flex-shrink: 0;
+      cursor: pointer;
+    }
+
+    /* ─── Buttons ────────────────────────────────────────────────────── */
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      height: 48px;
       background: var(--color-black);
       color: #fff;
       border: none;
       border-radius: 4px;
       cursor: pointer;
       padding: 0 20px;
+      white-space: nowrap;
+    }
+    .btn-primary img { filter: invert(1); }
+
+    /* Inside the footer actions row, primary button stretches to fill */
+    .footer-actions .btn-primary { flex: 1; }
+
+    .btn-secondary {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      height: 48px;
+      background: none;
+      color: var(--color-black);
+      border: 1px solid var(--color-black);
+      border-radius: 4px;
+      cursor: pointer;
+      padding: 0 20px;
+      white-space: nowrap;
     }
 
     .btn-icon {
       flex-shrink: 0;
-      width: 52px;
-      height: 52px;
-      display: flex;
+      width: 48px;
+      height: 48px;
+      display: inline-flex;
       align-items: center;
       justify-content: center;
       background: none;
@@ -249,7 +261,7 @@
       cursor: pointer;
     }
 
-    /* ─── Sticky footer ───────────────────────────────────────────────── */
+    /* ─── Fixed footer ───────────────────────────────────────────────── */
     .page-footer {
       position: fixed;
       bottom: 0;
@@ -258,13 +270,11 @@
       z-index: 100;
       overflow: hidden;
     }
-
     .page-footer__bg {
       position: absolute;
       inset: 0;
       background: var(--color-gray-25);
     }
-
     .page-footer__inner {
       position: relative;
       z-index: 1;
@@ -273,33 +283,156 @@
       flex-direction: column;
       gap: 12px;
     }
-
     .footer-info {
       display: flex;
       align-items: center;
       justify-content: space-between;
     }
-
     .footer-price {
       display: flex;
       align-items: flex-start;
       gap: 8px;
     }
+    .footer-price img { margin-top: 2px; flex-shrink: 0; }
+    .footer-actions { display: flex; gap: 8px; }
 
-    .footer-price img {
-      margin-top: 2px;
-      flex-shrink: 0;
-    }
-
-    .footer-actions {
+    /* ─── Option list ────────────────────────────────────────────────── */
+    .option-list { padding: 0 24px 158px; }
+    .option { height: 104px; padding: 8px 0; }
+    .option-inner {
+      height: 88px;
       display: flex;
-      gap: 8px;
+      align-items: center;
+      gap: 16px;
+    }
+    .option-inner--selected {
+      border-left: 2px solid var(--color-black);
+      padding-left: 24px;
+    }
+    .option-text {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .option-swatch {
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      border: 1px solid #fff;
+      flex-shrink: 0;
+      object-fit: cover;
     }
 
-    /* ─── Content ─────────────────────────────────────────────────────── */
-    .content {
-      padding: 32px 24px 148px; /* 148 = footer height + breathing room */
-      color: #000;
+    /* ─── Placeholder page body ──────────────────────────────────────── */
+    .placeholder-body { padding: 0 24px 162px; }
+
+    /* ─── Form ───────────────────────────────────────────────────────── */
+    .form-body {
+      padding: 64px 24px 120px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .form-group {
+      display: flex;
+      flex-direction: column;
+    }
+    .form-group > label {
+      margin-bottom: 8px;
+    }
+    .form-row {
+      display: flex;
+      gap: 12px;
+    }
+    .form-row .form-group { flex: 1; }
+    .form-row .form-group--zip { flex: 0 0 33%; }
+
+    .form-input {
+      display: block;
+      height: 48px;
+      border: 1px solid var(--color-black);
+      border-radius: 4px;
+      background: rgba(255,255,255,0.5);
+      padding: 0 16px;
+      color: var(--color-black);
+      outline: none;
+      width: 100%;
+    }
+    .form-select-wrap { position: relative; }
+    .form-select-wrap::after {
+      content: '';
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 24px;
+      height: 24px;
+      background: url('assets/icons/arrow-down.svg') center / contain no-repeat;
+      pointer-events: none;
+    }
+    .form-select-wrap .form-input {
+      appearance: none;
+      -webkit-appearance: none;
+      padding-right: 44px;
+    }
+
+    /* ─── Landing page ───────────────────────────────────────────────── */
+
+    .landing {
+      position: relative;
+      height: calc(100dvh - var(--nav-h, 52px));
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+    .landing__image {
+      flex: 1;
+      min-height: 0;
+      position: relative;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      overflow: hidden;
+    }
+    .landing__arrow {
+      position: absolute;
+      top: 50%;
+      left: 0;
+      width: 100%;
+      height: auto;
+      transform: translateY(-50%);
+      pointer-events: none;
+    }
+    .landing__image-door {
+      position: relative;
+      z-index: 1;
+      height: 100%;
+      width: auto;
+      object-fit: contain;
+      object-position: bottom center;
+    }
+    .landing__content {
+      flex-shrink: 0;
+      padding: 24px 24px 0;
+    }
+    .landing__buttons {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 16px;
+      margin-top: 32px;
+      margin-bottom: 24px;
+    }
+    .landing__schindler {
+      flex-shrink: 0;
+      display: flex;
+      justify-content: flex-end;
+      padding: 0 16px 16px;
+    }
+    .landing__schindler img {
+      height: 48px;
+      width: auto;
     }
   </style>
 </head>
@@ -330,89 +463,438 @@
     <!-- Navigation -->
     <nav class="nav">
       <div class="nav-inner">
-        <img class="nav-logo" src="assets/schindler-logo.png" alt="Schindler X8" />
+        <img class="nav-logo" src="assets/schindler-x8-logo.png" alt="Schindler X8" />
         <button class="nav-menu-btn" aria-label="Open menu">
           <img src="assets/icons/menu.svg" alt="" width="24" height="24" />
         </button>
       </div>
     </nav>
 
-    <!-- Step header -->
-    <div class="step-header">
-      <div class="step-indicator">
-        <div class="step-indicator__line step-indicator__line--active"></div>
-        <div class="step-indicator__line step-indicator__line--active"></div>
-        <div class="step-indicator__line"></div>
-        <div class="step-indicator__line"></div>
-        <div class="step-indicator__line"></div>
-      </div>
-      <p class="step-header__sub typo-h3">Choose your</p>
-      <h1 class="step-header__title typo-h1">Landing doors</h1>
-    </div>
-
-    <!-- Sentinel: when this exits the viewport, hero is stuck -->
-    <div id="hero-sentinel" style="height:0;pointer-events:none;"></div>
-
-    <!-- Hero: elevator door (sticky, with clipped background) -->
-    <div class="hero">
-      <div class="app-bg app-bg--hero">
-        <div class="app-bg__ellipse">
-          <svg viewBox="0 0 963 711" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <g filter="url(#hero-blur)">
-              <ellipse cx="481.5" cy="355.5" rx="281.5" ry="155.5" fill="#F6F6F6"/>
-            </g>
-            <defs>
-              <filter id="hero-blur" x="0" y="0" width="963" height="711" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
-                <feFlood flood-opacity="0" result="bg"/>
-                <feBlend in="SourceGraphic" in2="bg" result="shape"/>
-                <feGaussianBlur stdDeviation="100" result="blur"/>
-              </filter>
-            </defs>
-          </svg>
+    <!-- ── Page 0: Landing ─────────────────────────────────────────── -->
+    <section class="page" id="page-0">
+      <div class="landing">
+        <div class="landing__image">
+          <img class="landing__arrow" src="assets/uniarrow.svg" alt="" />
+          <img class="landing__image-door" src="assets/door-polar-white.png" alt="Schindler X8 elevator" />
+        </div>
+        <div class="landing__content">
+          <h1 class="typo-title">Free your imagination and create your Schindler X8.</h1>
+          <div class="landing__buttons">
+            <button class="btn-secondary typo-button">Open existing configuration</button>
+            <button class="btn-primary typo-button" onclick="navigate(1)">
+              Get started
+              <img src="assets/icons/arrow-right.svg" alt="" width="20" height="20" />
+            </button>
+          </div>
+        </div>
+        <div class="landing__schindler">
+          <img src="assets/basics-schindler-logo.svg" alt="Schindler" />
         </div>
       </div>
-      <img class="hero-img" src="assets/outside_white_doors_cropped_3840.png" alt="Schindler X8 elevator" />
-    </div>
+    </section>
 
-    <!-- Content -->
-    <div class="content typo-body">
-      <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.</p>
-      <p>At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi. Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.</p>
-    </div>
+    <!-- ── Page 1: Step 1 — Start with your Schindler X8 ─────────── -->
+    <section class="page" id="page-1">
+      <div class="step-header">
+        <div class="step-indicator">
+          <div class="step-indicator__line step-indicator__line--active"></div>
+          <div class="step-indicator__line"></div>
+          <div class="step-indicator__line"></div>
+          <div class="step-indicator__line"></div>
+          <div class="step-indicator__line"></div>
+        </div>
+        <p class="step-header__sub typo-h3">Start with your</p>
+        <h1 class="step-header__title typo-h1">Schindler X8</h1>
+      </div>
+      <div class="form-body">
+        <div class="form-group">
+          <label class="typo-label">Project title</label>
+          <input class="form-input typo-body" type="text" value="Maison Lavaux" />
+        </div>
+        <div class="form-row">
+          <div class="form-group form-group--zip">
+            <label class="typo-label">Project's zip</label>
+            <input class="form-input typo-body" type="text" value="1803" />
+          </div>
+          <div class="form-group">
+            <label class="typo-label">Project's country</label>
+            <div class="form-select-wrap">
+              <select class="form-input typo-body">
+                <option>Switzerland</option>
+                <option>Germany</option>
+                <option>Austria</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="typo-label">Building type</label>
+          <div class="form-select-wrap">
+            <select class="form-input typo-body">
+              <option>New building, new lift</option>
+              <option>Existing building, new lift</option>
+              <option>Existing building, replacement</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="typo-label">Number of stops</label>
+          <div class="form-select-wrap">
+            <select class="form-input typo-body">
+              <option>8 stops</option>
+              <option>2 stops</option>
+              <option>3 stops</option>
+              <option>4 stops</option>
+              <option>5 stops</option>
+              <option>6 stops</option>
+              <option>7 stops</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Page 2: Step 2 — Choose your Landing doors ────────────── -->
+    <section class="page" id="page-2">
+      <div class="step-header">
+        <div class="step-indicator">
+          <div class="step-indicator__line step-indicator__line--active"></div>
+          <div class="step-indicator__line step-indicator__line--active"></div>
+          <div class="step-indicator__line"></div>
+          <div class="step-indicator__line"></div>
+          <div class="step-indicator__line"></div>
+        </div>
+        <p class="step-header__sub typo-h3">Choose your</p>
+        <h1 class="step-header__title typo-h1">Landing doors</h1>
+      </div>
+      <div class="hero-sentinel" style="height:0;pointer-events:none;"></div>
+      <div class="hero">
+        <div class="app-bg app-bg--hero">
+          <div class="app-bg__ellipse">
+            <svg viewBox="0 0 963 711" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <g filter="url(#hero-blur-2)">
+                <ellipse cx="481.5" cy="355.5" rx="281.5" ry="155.5" fill="#F6F6F6"/>
+              </g>
+              <defs>
+                <filter id="hero-blur-2" x="0" y="0" width="963" height="711" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+                  <feFlood flood-opacity="0" result="bg"/>
+                  <feBlend in="SourceGraphic" in2="bg" result="shape"/>
+                  <feGaussianBlur stdDeviation="100" result="blur"/>
+                </filter>
+              </defs>
+            </svg>
+          </div>
+        </div>
+        <img class="hero-img" src="assets/door-polar-white.png" alt="Schindler X8 elevator" />
+      </div>
+      <div class="option-list">
+        <div class="option">
+          <div class="option-inner option-inner--selected">
+            <div class="option-text">
+              <span class="typo-h4">Polar White RAL 9010</span>
+            </div>
+            <img class="option-swatch" src="assets/door-pattern-polar-white.png" alt="Polar White RAL 9010" />
+          </div>
+        </div>
+        <div class="option">
+          <div class="option-inner">
+            <div class="option-text">
+              <span class="typo-h4">Mercury Brushed</span>
+              <span class="typo-body">Stainless steel</span>
+              <span class="typo-body">+ CHF 4'000</span>
+            </div>
+            <img class="option-swatch" src="assets/door-pattern-mercury-brushed.png" alt="Mercury Brushed" />
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Page 3: Step 3 — Choose your Interior package ─────────── -->
+    <section class="page" id="page-3">
+      <div class="step-header">
+        <div class="step-indicator">
+          <div class="step-indicator__line step-indicator__line--active"></div>
+          <div class="step-indicator__line step-indicator__line--active"></div>
+          <div class="step-indicator__line step-indicator__line--active"></div>
+          <div class="step-indicator__line"></div>
+          <div class="step-indicator__line"></div>
+        </div>
+        <p class="step-header__sub typo-h3">Choose your</p>
+        <h1 class="step-header__title typo-h1">Interior package</h1>
+      </div>
+      <div class="hero-sentinel" style="height:0;pointer-events:none;"></div>
+      <div class="hero hero--split">
+        <div class="app-bg app-bg--hero">
+          <div class="app-bg__ellipse">
+            <svg viewBox="0 0 963 711" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <g filter="url(#hero-blur-3)">
+                <ellipse cx="481.5" cy="355.5" rx="281.5" ry="155.5" fill="#F6F6F6"/>
+              </g>
+              <defs>
+                <filter id="hero-blur-3" x="0" y="0" width="963" height="711" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+                  <feFlood flood-opacity="0" result="bg"/>
+                  <feBlend in="SourceGraphic" in2="bg" result="shape"/>
+                  <feGaussianBlur stdDeviation="100" result="blur"/>
+                </filter>
+              </defs>
+            </svg>
+          </div>
+        </div>
+        <div class="hero-split">
+          <img class="hero-split__main" src="assets/interior-luna.png" alt="Luna interior" />
+          <div class="hero-split__thumbs">
+            <img class="hero-thumb" src="assets/interior-luna-panel.png" alt="Panel" />
+            <img class="hero-thumb" src="assets/interior-luna-corner.png" alt="Corner" />
+            <img class="hero-thumb" src="assets/interior-luna-handrails.png" alt="Handrails" />
+            <img class="hero-thumb" src="assets/interior-luna-door.png" alt="Door" />
+          </div>
+        </div>
+      </div>
+      <div class="option-list">
+        <div class="option">
+          <div class="option-inner option-inner--selected">
+            <div class="option-text">
+              <span class="typo-h4">Luna</span>
+              <span class="typo-body">Elegant and timeless</span>
+            </div>
+            <img class="option-swatch" src="assets/interior-pattern-luna.png" alt="Luna" />
+          </div>
+        </div>
+        <div class="option">
+          <div class="option-inner">
+            <div class="option-text">
+              <span class="typo-h4">Mineral</span>
+              <span class="typo-body">Classic and natural</span>
+              <span class="typo-body">+ CHF 800</span>
+            </div>
+            <img class="option-swatch" src="assets/interior-pattern-mineral.png" alt="Mineral" />
+          </div>
+        </div>
+        <div class="option">
+          <div class="option-inner">
+            <div class="option-text">
+              <span class="typo-h4">Savanna</span>
+              <span class="typo-body">Bright and dreamy</span>
+              <span class="typo-body">+ CHF 900</span>
+            </div>
+            <img class="option-swatch" src="assets/interior-pattern-savanna.png" alt="Savanna" />
+          </div>
+        </div>
+        <div class="option">
+          <div class="option-inner">
+            <div class="option-text">
+              <span class="typo-h4">Terra</span>
+              <span class="typo-body">Pristine and fascinating</span>
+              <span class="typo-body">+ CHF 1'250</span>
+            </div>
+            <img class="option-swatch" src="assets/interior-pattern-terra.png" alt="Terra" />
+          </div>
+        </div>
+        <div class="option">
+          <div class="option-inner">
+            <div class="option-text">
+              <span class="typo-h4">Forest</span>
+              <span class="typo-body">Romantic and warm</span>
+              <span class="typo-body">+ CHF 2'100</span>
+            </div>
+            <img class="option-swatch" src="assets/interior-pattern-forest.png" alt="Forest" />
+          </div>
+        </div>
+        <div class="option">
+          <div class="option-inner">
+            <div class="option-text">
+              <span class="typo-h4">Volcano</span>
+              <span class="typo-body">Enigmatic and intense</span>
+              <span class="typo-body">+ CHF 2'450</span>
+            </div>
+            <img class="option-swatch" src="assets/interior-pattern-volcano.png" alt="Volcano" />
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Page 4: Step 4 — Choose your Mirror Option ────────────── -->
+    <section class="page" id="page-4">
+      <div class="step-header">
+        <div class="step-indicator">
+          <div class="step-indicator__line step-indicator__line--active"></div>
+          <div class="step-indicator__line step-indicator__line--active"></div>
+          <div class="step-indicator__line step-indicator__line--active"></div>
+          <div class="step-indicator__line step-indicator__line--active"></div>
+          <div class="step-indicator__line"></div>
+        </div>
+        <p class="step-header__sub typo-h3">Choose your</p>
+        <h1 class="step-header__title typo-h1">Mirror Option</h1>
+      </div>
+      <div class="hero-sentinel" style="height:0;pointer-events:none;"></div>
+      <div class="hero">
+        <div class="app-bg app-bg--hero">
+          <div class="app-bg__ellipse">
+            <svg viewBox="0 0 963 711" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <g filter="url(#hero-blur-4)">
+                <ellipse cx="481.5" cy="355.5" rx="281.5" ry="155.5" fill="#F6F6F6"/>
+              </g>
+              <defs>
+                <filter id="hero-blur-4" x="0" y="0" width="963" height="711" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+                  <feFlood flood-opacity="0" result="bg"/>
+                  <feBlend in="SourceGraphic" in2="bg" result="shape"/>
+                  <feGaussianBlur stdDeviation="100" result="blur"/>
+                </filter>
+              </defs>
+            </svg>
+          </div>
+        </div>
+        <img class="hero-img" src="assets/door-polar-white.png" alt="Schindler X8 elevator" />
+      </div>
+      <div class="placeholder-body"></div>
+    </section>
+
+    <!-- ── Page 5: Step 5 — Complete your Technical details ──────── -->
+    <section class="page" id="page-5">
+      <div class="step-header">
+        <div class="step-indicator">
+          <div class="step-indicator__line step-indicator__line--active"></div>
+          <div class="step-indicator__line step-indicator__line--active"></div>
+          <div class="step-indicator__line step-indicator__line--active"></div>
+          <div class="step-indicator__line step-indicator__line--active"></div>
+          <div class="step-indicator__line step-indicator__line--active"></div>
+        </div>
+        <p class="step-header__sub typo-h3">Complete your</p>
+        <h1 class="step-header__title typo-h1">Technical details</h1>
+      </div>
+      <div class="hero-sentinel" style="height:0;pointer-events:none;"></div>
+      <div class="hero">
+        <div class="app-bg app-bg--hero">
+          <div class="app-bg__ellipse">
+            <svg viewBox="0 0 963 711" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <g filter="url(#hero-blur-5)">
+                <ellipse cx="481.5" cy="355.5" rx="281.5" ry="155.5" fill="#F6F6F6"/>
+              </g>
+              <defs>
+                <filter id="hero-blur-5" x="0" y="0" width="963" height="711" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+                  <feFlood flood-opacity="0" result="bg"/>
+                  <feBlend in="SourceGraphic" in2="bg" result="shape"/>
+                  <feGaussianBlur stdDeviation="100" result="blur"/>
+                </filter>
+              </defs>
+            </svg>
+          </div>
+        </div>
+        <img class="hero-img" src="assets/door-polar-white.png" alt="Schindler X8 elevator" />
+      </div>
+      <div class="placeholder-body"></div>
+    </section>
+
+    <!-- ── Page 6: Summary ────────────────────────────────────────── -->
+    <section class="page" id="page-6">
+      <div class="placeholder-body" style="padding-top: 40px;">
+        <p class="step-header__sub typo-h3">Your Schindler X8 for</p>
+        <h1 class="step-header__title typo-h1">Maison Lavaux</h1>
+      </div>
+    </section>
 
   </div><!-- /#app -->
 
   <!-- Fixed footer: always pinned to bottom -->
-  <footer class="page-footer">
+  <footer class="page-footer" id="page-footer">
     <div class="page-footer__bg"></div>
-    <div class="page-footer__inner">
-      <div class="footer-info">
-        <span class="typo-h4">Maison Lavaux</span>
-        <div class="footer-price">
-          <span class="typo-h5">CHF XY'000</span>
-          <img src="assets/icons/info.svg" alt="Info" width="18" height="18" />
-        </div>
-      </div>
-      <div class="footer-actions">
-        <button class="btn-icon" aria-label="Previous">
-          <img src="assets/icons/arrow-left.svg" alt="" width="20" height="20" />
-        </button>
-        <button class="btn-primary typo-button">
-          Interior package
-          <img src="assets/icons/arrow-right.svg" alt="" width="20" height="20" />
-        </button>
-      </div>
-    </div>
+    <div class="page-footer__inner" id="footer-inner"></div>
   </footer>
 
   <script>
-    const sentinel = document.getElementById('hero-sentinel');
-    const hero = document.querySelector('.hero');
-    const observer = new IntersectionObserver(
-      ([entry]) => hero.classList.toggle('is-sticky', !entry.isIntersecting),
-      { threshold: 0 }
+    document.documentElement.style.setProperty(
+      '--nav-h', document.querySelector('.nav').offsetHeight + 'px'
     );
-    observer.observe(sentinel);
+
+    var PAGES = [
+      { footer: 'landing',  nextLabel: 'Get started' },
+      { footer: 'steps',    nextLabel: 'Design your Schindler X8', showPrice: false, showInfo: false },
+      { footer: 'steps',    nextLabel: 'Interior package' },
+      { footer: 'steps',    nextLabel: 'Mirror option' },
+      { footer: 'steps',    nextLabel: 'Technical details' },
+      { footer: 'steps',    nextLabel: 'Finish your Schindler X8' },
+      { footer: 'summary',  nextLabel: null },
+    ];
+
+    var currentIndex = 0;
+    var heroObserver = null;
+
+    function navigate(index) {
+      if (index < 0 || index >= PAGES.length) return;
+
+      document.getElementById('page-' + currentIndex).classList.remove('is-active');
+
+      if (heroObserver) {
+        heroObserver.disconnect();
+        heroObserver = null;
+      }
+
+      currentIndex = index;
+      var page = PAGES[index];
+      var pageEl = document.getElementById('page-' + index);
+      pageEl.classList.add('is-active');
+      window.scrollTo(0, 0);
+      document.body.style.overflow = (page.footer === 'landing') ? 'hidden' : '';
+
+      var sentinel = pageEl.querySelector('.hero-sentinel');
+      var hero = pageEl.querySelector('.hero');
+      if (sentinel && hero) {
+        heroObserver = new IntersectionObserver(
+          function(entries) {
+            hero.classList.toggle('is-sticky', !entries[0].isIntersecting);
+          },
+          { threshold: 0 }
+        );
+        heroObserver.observe(sentinel);
+      }
+
+      renderFooter(PAGES[index], index);
+    }
+
+    function renderFooter(page, index) {
+      var inner = document.getElementById('footer-inner');
+      var arrowRight = '<img src="assets/icons/arrow-right.svg" alt="" width="20" height="20" />';
+      var arrowLeft  = '<img src="assets/icons/arrow-left.svg" alt="" width="20" height="20" />';
+
+      if (page.footer === 'landing') {
+        document.getElementById('page-footer').style.display = 'none';
+        return;
+
+      } else if (page.footer === 'steps') {
+        document.getElementById('page-footer').style.display = '';
+        inner.innerHTML =
+          (page.showInfo !== false ?
+            '<div class="footer-info">' +
+              '<span class="typo-h4">Maison Lavaux</span>' +
+              (page.showPrice !== false ?
+                '<div class="footer-price">' +
+                  '<span class="typo-h5">CHF XY\'000</span>' +
+                  '<img src="assets/icons/info.svg" alt="Info" width="18" height="18" />' +
+                '</div>'
+              : '') +
+            '</div>'
+          : '') +
+          '<div class="footer-actions">' +
+            '<button class="btn-icon" aria-label="Previous" onclick="navigate(' + (index - 1) + ')">' +
+              arrowLeft +
+            '</button>' +
+            '<button class="btn-primary typo-button" onclick="navigate(' + (index + 1) + ')">' +
+              page.nextLabel + arrowRight +
+            '</button>' +
+          '</div>';
+
+      } else if (page.footer === 'summary') {
+        document.getElementById('page-footer').style.display = '';
+        inner.innerHTML =
+          '<div class="footer-actions">' +
+            '<button class="btn-primary typo-button" onclick="navigate(' + (index - 1) + ')">' +
+              'Change your configuration' +
+            '</button>' +
+          '</div>';
+      }
+    }
+
+    navigate(0);
   </script>
 </body>
 </html>
