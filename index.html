@@ -1491,10 +1491,12 @@
         el.src = newSrc;
         el.style.transition = 'none';
         el.style.opacity = '1';
-        requestAnimationFrame(function() {
+        overlay.style.transition = 'opacity 0.15s ease';
+        overlay.style.opacity = '0';
+        setTimeout(function() {
           if (overlay.parentElement) overlay.parentElement.removeChild(overlay);
           el.style.transition = '';
-        });
+        }, 160);
       }, 380);
     }
 
