@@ -189,7 +189,7 @@
       flex: 1;
       min-width: 0;
       display: block;
-      height: 37.5dvh;
+      height: 37.5svh;
       min-height: 320px;
       width: auto;
       object-fit: contain;
@@ -392,7 +392,7 @@
       border-color: rgba(0,0,0,0.4);
       background: rgba(0,0,0,0.1);
     }
-    .radio-option__label { color: var(--color-black); }
+    .radio-option__label { color: var(--color-black); min-width: 25svw; }
     .radio-option--disabled .radio-option__label { color: rgba(0,0,0,0.4); }
 
     /* ─── Form ───────────────────────────────────────────────────────── */
@@ -449,10 +449,9 @@
 
     .landing {
       position: relative;
-      height: calc(100dvh - var(--nav-h, 52px));
+      height: calc(100svh - 80px);
       display: flex;
       flex-direction: column;
-      overflow: hidden;
     }
     .landing__image {
       flex: 1;
@@ -943,10 +942,6 @@
   </footer>
 
   <script>
-    document.documentElement.style.setProperty(
-      '--nav-h', document.querySelector('.nav').offsetHeight + 'px'
-    );
-
     var PAGES = [
       { footer: 'landing',  nextLabel: 'Get started' },
       { footer: 'steps',    nextLabel: 'Design your Schindler X8', showPrice: false, showInfo: false },
@@ -975,7 +970,6 @@
       var pageEl = document.getElementById('page-' + index);
       pageEl.classList.add('is-active');
       window.scrollTo(0, 0);
-      document.body.style.overflow = (page.footer === 'landing') ? 'hidden' : '';
 
       var sentinel = pageEl.querySelector('.hero-sentinel');
       var hero = pageEl.querySelector('.hero');
@@ -1036,6 +1030,12 @@
     }
 
     navigate(0);
+
+    window.matchMedia('(max-width: 839px)').addEventListener('change', function(e) {
+      if (e.matches) {
+        navigate(currentIndex);
+      }
+    });
   </script>
 </body>
 </html>
