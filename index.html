@@ -819,6 +819,61 @@
       height: 48px;
       width: auto;
     }
+
+    /* ─── Confirmation page ───────────────────────────────────────────── */
+    .confirm {
+      height: calc(100svh - 80px);
+      display: flex;
+      flex-direction: column;
+    }
+    .confirm__top {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 32px 24px 24px;
+    }
+    .confirm__title {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+    .confirm__body {
+      margin-bottom: 32px;
+    }
+    .confirm__showroom-wrap {
+      padding: 0 24px;
+      flex-shrink: 0;
+      position: relative;
+      z-index: 1;
+    }
+    .confirm__image-bar {
+      flex-shrink: 0;
+      height: 64px;
+      background: #ffffff;
+      margin-top: -64px;
+    }
+    .confirm__showroom {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+    .confirm__caption {
+      padding: 24px;
+      background: #ffffff;
+      color: var(--color-black);
+    }
+    .confirm__schindler {
+      flex-shrink: 0;
+      display: flex;
+      justify-content: flex-end;
+      padding: 16px 16px 16px;
+    }
+    .confirm__schindler img {
+      height: 48px;
+      width: auto;
+    }
   </style>
 </head>
 <body>
@@ -1441,11 +1496,35 @@
           </div>
         </div>
 
-        <button class="btn-primary typo-button offer-cta">Request offer</button>
+        <button class="btn-primary typo-button offer-cta" onclick="navigate(8)">Request offer</button>
       </div>
 
       <div class="offer-schindler">
         <img src="assets/basics-schindler-logo.svg" alt="Schindler" />
+      </div>
+    </section>
+
+    <!-- ── Page 8: Confirmation ──────────────────────────────────── -->
+    <section class="page" id="page-8">
+      <div class="confirm">
+        <div class="confirm__top">
+          <div class="confirm__content">
+            <div class="confirm__title">
+              <img src="assets/icons/check.svg" alt="" width="32" height="32" />
+              <h1 class="typo-title">Request sent</h1>
+            </div>
+            <p class="typo-body confirm__body">Thanks for your interest in Schindler X8. You will be contacted by our sales expert within 2 business days.</p>
+            <button class="btn-secondary typo-button">Learn more about Schindler X8</button>
+          </div>
+        </div>
+        <div class="confirm__showroom-wrap">
+          <img class="confirm__showroom" src="assets/showroom.png" alt="Schindler X8 showroom" />
+        </div>
+        <div class="confirm__image-bar"></div>
+        <p class="typo-body confirm__caption">Visit our showroom to experience the Schindler X8 in person.</p>
+        <div class="confirm__schindler">
+          <img src="assets/basics-schindler-logo.svg" alt="Schindler" />
+        </div>
       </div>
     </section>
 
@@ -1469,6 +1548,7 @@
       { footer: 'steps',    nextLabel: 'Finish your Schindler X8' },
       { footer: 'summary',  nextLabel: null },
       { footer: 'offer',    nextLabel: null },
+      { footer: 'landing',  nextLabel: null },
     ];
 
     var currentIndex = 0;
