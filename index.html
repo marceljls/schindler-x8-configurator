@@ -278,6 +278,16 @@
       cursor: pointer;
     }
 
+    .btn-tertiary {
+      display: inline-flex;
+      align-items: center;
+      gap: 16px;
+      background: none;
+      border: none;
+      padding: 0;
+      cursor: pointer;
+    }
+
     /* ─── Fixed footer ───────────────────────────────────────────────── */
     .page-footer {
       position: fixed;
@@ -314,7 +324,7 @@
     .footer-actions { display: flex; gap: 8px; }
 
     /* ─── Option list ────────────────────────────────────────────────── */
-    .option-list { padding: 0 24px 158px; }
+    .option-list { padding: 0 24px 182px; }
     .option { height: 104px; padding: 8px 0; }
     .option-inner {
       height: 88px;
@@ -343,10 +353,17 @@
 
     /* ─── Placeholder page body ──────────────────────────────────────── */
     .placeholder-body { padding: 0 24px 162px; }
+    .summary-header {
+      padding: 12px 24px 0;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+    .summary-header__title { color: #1a1a1a; }
 
     /* ─── Radio groups ───────────────────────────────────────────────── */
     .radio-section {
-      padding: 24px 24px 158px;
+      padding: 24px 24px 182px;
       display: flex;
       flex-direction: column;
       gap: 24px;
@@ -371,7 +388,7 @@
       height: 24px;
       border-radius: 50%;
       border: 1px solid var(--color-black);
-      background: transparent;
+      background: rgba(255,255,255,0.5);
       flex-shrink: 0;
       display: flex;
       align-items: center;
@@ -397,7 +414,7 @@
 
     /* ─── Form ───────────────────────────────────────────────────────── */
     .form-body {
-      padding: 64px 24px 120px;
+      padding: 64px 24px 144px;
       display: flex;
       flex-direction: column;
       gap: 16px;
@@ -927,9 +944,12 @@
 
     <!-- ── Page 6: Summary ────────────────────────────────────────── -->
     <section class="page" id="page-6">
-      <div class="placeholder-body" style="padding-top: 40px;">
-        <p class="step-header__sub typo-h3">Your Schindler X8 for</p>
-        <h1 class="step-header__title typo-h1">Maison Lavaux</h1>
+      <div class="summary-header">
+        <button class="btn-tertiary" onclick="navigate(5)">
+          <img src="assets/icons/arrow-left.svg" width="24" height="24" alt="" />
+          <span class="typo-body">Change your configuration</span>
+        </button>
+        <h1 class="typo-h1 summary-header__title">Your Schindler X8 for Maison Lavaux</h1>
       </div>
     </section>
 
@@ -1019,13 +1039,7 @@
           '</div>';
 
       } else if (page.footer === 'summary') {
-        document.getElementById('page-footer').style.display = '';
-        inner.innerHTML =
-          '<div class="footer-actions">' +
-            '<button class="btn-primary typo-button" onclick="navigate(' + (index - 1) + ')">' +
-              'Change your configuration' +
-            '</button>' +
-          '</div>';
+        document.getElementById('page-footer').style.display = 'none';
       }
     }
 
