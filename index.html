@@ -9,6 +9,29 @@
     :root {
       --color-black:   #000000;
       --color-gray-25: #F7F7F7;
+
+      /* Primitives */
+      --luna-gradient-start:  #D3D1D1;
+      --luna-gradient-middle: #E8E7E7;
+      --luna-gradient-end:    #D3D1D1;
+      --luna-spotlight:       #F6F6F6;
+
+      --mineral-gradient-start:  #B7B0A8;
+      --mineral-gradient-middle: #D0C8BF;
+      --mineral-gradient-end:    #B7B0A8;
+      --mineral-spotlight:       #EEE6DB;
+
+      /* Semantics — default: Luna */
+      --gradient-start:  var(--luna-gradient-start);
+      --gradient-middle: var(--luna-gradient-middle);
+      --gradient-end:    var(--luna-gradient-end);
+      --spotlight:       var(--luna-spotlight);
+    }
+    [data-theme="mineral"] {
+      --gradient-start:  var(--mineral-gradient-start);
+      --gradient-middle: var(--mineral-gradient-middle);
+      --gradient-end:    var(--mineral-gradient-end);
+      --spotlight:       var(--mineral-spotlight);
     }
 
     @font-face {
@@ -72,9 +95,22 @@
 
     /* ─── Background ──────────────────────────────────────────────────── */
     .app-bg {
-      background: linear-gradient(161.59deg, #D3D1D1 1.996%, #E8E7E7 45.421%, #D3D1D1 96.605%);
+      background: linear-gradient(161.59deg, var(--luna-gradient-start) 1.996%, var(--luna-gradient-middle) 45.421%, var(--luna-gradient-end) 96.605%);
       pointer-events: none;
       overflow: hidden;
+      position: relative;
+    }
+    .app-bg::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      background: linear-gradient(161.59deg, var(--mineral-gradient-start) 1.996%, var(--mineral-gradient-middle) 45.421%, var(--mineral-gradient-end) 96.605%);
+      opacity: 0;
+      transition: opacity 0.6s ease;
+    }
+    [data-theme="mineral"] .app-bg::after {
+      opacity: 1;
     }
     .app-bg--page {
       position: fixed;
@@ -95,10 +131,11 @@
     }
     .app-bg__ellipse {
       position: absolute;
-      width: 152%;
-      left: -22%;
-      top: 7%;
-      transform: rotate(-6.76deg);
+      z-index: 1;
+      width: 148svw;
+      left: -24svw;
+      top: calc(12vh - 20svw);
+      transform: rotate(-15deg);
       transform-origin: center;
     }
     .app-bg__ellipse svg {
@@ -137,8 +174,36 @@
     }
 
     /* ─── Multi-page system ───────────────────────────────────────────── */
-    .page { display: none; }
-    .page.is-active { display: block; }
+    .pages-container { position: relative; }
+    .page {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 0;
+      overflow: hidden;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.35s ease;
+    }
+    .page.is-active {
+      position: relative;
+      height: auto;
+      overflow: visible;
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .page.is-leaving {
+      position: absolute;
+      top: var(--leave-offset, 0px);
+      left: 0;
+      width: 100%;
+      height: auto;
+      overflow: visible;
+      z-index: 1;
+      opacity: 0;
+      pointer-events: none;
+    }
 
     /* ─── Step header ────────────────────────────────────────────────── */
     .step-header { padding: 12px 24px 0; }
@@ -185,13 +250,21 @@
       position: relative;
       z-index: 1;
     }
-    .hero-split__main {
+    .hero-split__main,
+    .hero-thumb {
+      transition: opacity 0.3s ease;
+    }
+    .hero-split__main-wrap {
+      position: relative;
       flex: 1;
       min-width: 0;
       display: block;
+    }
+    .hero-split__main {
+      display: block;
+      width: 100%;
       height: 37.5svh;
       min-height: 320px;
-      width: auto;
       object-fit: contain;
       object-position: center bottom;
     }
@@ -199,6 +272,13 @@
       display: flex;
       flex-direction: column;
       gap: 8px;
+      flex-shrink: 0;
+    }
+    .hero-thumb-wrap {
+      position: relative;
+      display: block;
+      width: 64px;
+      height: 64px;
       flex-shrink: 0;
     }
     .hero-thumb {
@@ -332,11 +412,15 @@
       display: flex;
       align-items: center;
       gap: 16px;
+      border-left: 2px solid transparent;
+      padding-left: 0;
+      transition: border-color 0.25s ease, padding-left 0.25s ease;
     }
     .option-inner--selected {
-      border-left: 2px solid var(--color-black);
+      border-left-color: var(--color-black);
       padding-left: 24px;
     }
+    .option { cursor: pointer; }
     .option-text {
       flex: 1;
       display: flex;
@@ -597,6 +681,81 @@
       padding-right: 44px;
     }
 
+    /* ─── Checkbox (square radio) ───────────────────────────────────── */
+    .checkbox-option {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      cursor: pointer;
+    }
+    .checkbox-option__box {
+      width: 24px;
+      height: 24px;
+      border-radius: 3px;
+      border: 1px solid var(--color-black);
+      background: rgba(255,255,255,0.5);
+      flex-shrink: 0;
+      align-self: flex-start;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .checkbox-option--checked .checkbox-option__box {
+      background: var(--color-black);
+      border-color: var(--color-black);
+    }
+    .checkbox-option--checked .checkbox-option__box::after {
+      content: '';
+      width: 12px;
+      height: 8px;
+      border-left: 2px solid white;
+      border-bottom: 2px solid white;
+      transform: rotate(-45deg) translateY(-1px);
+    }
+    .checkbox-option__label { color: var(--color-black); }
+
+    /* ─── Offer page ─────────────────────────────────────────────────── */
+    .offer-page {
+      padding: 12px 24px 0;
+    }
+    .offer-header {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 24px;
+    }
+    .offer-header__title { color: #1a1a1a; }
+    .offer-blocks {
+      margin-top: 48px;
+      display: flex;
+      flex-direction: column;
+      gap: 48px;
+      padding-bottom: 0;
+    }
+    .offer-block__title {
+      margin-bottom: 24px;
+      color: #1a1a1a;
+    }
+    .offer-form {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .offer-cta {
+      margin-top: 48px;
+      margin-bottom: 16px;
+      width: 100%;
+    }
+    .offer-schindler {
+      display: flex;
+      justify-content: flex-end;
+      padding: 32px 16px 16px;
+    }
+    .offer-schindler img {
+      height: 48px;
+      width: auto;
+    }
+
     /* ─── Landing page ───────────────────────────────────────────────── */
 
     .landing {
@@ -666,7 +825,7 @@
       <div class="app-bg__ellipse">
         <svg viewBox="0 0 963 711" fill="none" xmlns="http://www.w3.org/2000/svg">
           <g filter="url(#bg-blur)">
-            <ellipse cx="481.5" cy="355.5" rx="281.5" ry="155.5" fill="#F6F6F6"/>
+            <ellipse cx="481.5" cy="355.5" rx="281.5" ry="155.5" fill="var(--spotlight)"/>
           </g>
           <defs>
             <filter id="bg-blur" x="0" y="0" width="963" height="711" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
@@ -688,6 +847,8 @@
         </button>
       </div>
     </nav>
+
+    <div class="pages-container">
 
     <!-- ── Page 0: Landing ─────────────────────────────────────────── -->
     <section class="page" id="page-0">
@@ -792,7 +953,7 @@
           <div class="app-bg__ellipse">
             <svg viewBox="0 0 963 711" fill="none" xmlns="http://www.w3.org/2000/svg">
               <g filter="url(#hero-blur-2)">
-                <ellipse cx="481.5" cy="355.5" rx="281.5" ry="155.5" fill="#F6F6F6"/>
+                <ellipse cx="481.5" cy="355.5" rx="281.5" ry="155.5" fill="var(--spotlight)"/>
               </g>
               <defs>
                 <filter id="hero-blur-2" x="0" y="0" width="963" height="711" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
@@ -847,7 +1008,7 @@
           <div class="app-bg__ellipse">
             <svg viewBox="0 0 963 711" fill="none" xmlns="http://www.w3.org/2000/svg">
               <g filter="url(#hero-blur-3)">
-                <ellipse cx="481.5" cy="355.5" rx="281.5" ry="155.5" fill="#F6F6F6"/>
+                <ellipse cx="481.5" cy="355.5" rx="281.5" ry="155.5" fill="var(--spotlight)"/>
               </g>
               <defs>
                 <filter id="hero-blur-3" x="0" y="0" width="963" height="711" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
@@ -860,18 +1021,20 @@
           </div>
         </div>
         <div class="hero-split">
-          <img class="hero-split__main" src="assets/interior-luna.png" alt="Luna interior" />
+          <span class="hero-split__main-wrap">
+            <img class="hero-split__main" id="interior-img-main" src="assets/interior-luna.png" alt="Luna interior" />
+          </span>
           <div class="hero-split__thumbs">
-            <img class="hero-thumb" src="assets/interior-luna-panel.png" alt="Panel" />
-            <img class="hero-thumb" src="assets/interior-luna-corner.png" alt="Corner" />
-            <img class="hero-thumb" src="assets/interior-luna-handrails.png" alt="Handrails" />
-            <img class="hero-thumb" src="assets/interior-luna-door.png" alt="Door" />
+            <span class="hero-thumb-wrap"><img class="hero-thumb" id="interior-img-panel"     src="assets/interior-luna-panel.png" alt="Panel" /></span>
+            <span class="hero-thumb-wrap"><img class="hero-thumb" id="interior-img-corner"    src="assets/interior-luna-corner.png" alt="Corner" /></span>
+            <span class="hero-thumb-wrap"><img class="hero-thumb" id="interior-img-handrails" src="assets/interior-luna-handrails.png" alt="Handrails" /></span>
+            <span class="hero-thumb-wrap"><img class="hero-thumb" id="interior-img-door"      src="assets/interior-luna-door.png" alt="Door" /></span>
           </div>
         </div>
       </div>
       <div class="option-list">
-        <div class="option">
-          <div class="option-inner option-inner--selected">
+        <div class="option" onclick="selectInterior('luna', this)">
+          <div class="option-inner option-inner--selected" id="interior-opt-luna">
             <div class="option-text">
               <span class="typo-h4">Luna</span>
               <span class="typo-body">Elegant and timeless</span>
@@ -879,8 +1042,8 @@
             <img class="option-swatch" src="assets/interior-pattern-luna.png" alt="Luna" />
           </div>
         </div>
-        <div class="option">
-          <div class="option-inner">
+        <div class="option" onclick="selectInterior('mineral', this)">
+          <div class="option-inner" id="interior-opt-mineral">
             <div class="option-text">
               <span class="typo-h4">Mineral</span>
               <span class="typo-body">Classic and natural</span>
@@ -951,7 +1114,7 @@
           <div class="app-bg__ellipse">
             <svg viewBox="0 0 963 711" fill="none" xmlns="http://www.w3.org/2000/svg">
               <g filter="url(#hero-blur-4)">
-                <ellipse cx="481.5" cy="355.5" rx="281.5" ry="155.5" fill="#F6F6F6"/>
+                <ellipse cx="481.5" cy="355.5" rx="281.5" ry="155.5" fill="var(--spotlight)"/>
               </g>
               <defs>
                 <filter id="hero-blur-4" x="0" y="0" width="963" height="711" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
@@ -963,7 +1126,7 @@
             </svg>
           </div>
         </div>
-        <img class="hero-img" src="assets/door-polar-white.png" alt="Schindler X8 elevator" />
+        <img class="hero-img" id="mirror-img-main" src="assets/interior-luna.png" alt="Schindler X8 elevator" style="transition: opacity 0.3s ease;" />
       </div>
       <div class="option-list">
         <div class="option">
@@ -1011,7 +1174,7 @@
           <div class="app-bg__ellipse">
             <svg viewBox="0 0 963 711" fill="none" xmlns="http://www.w3.org/2000/svg">
               <g filter="url(#hero-blur-5)">
-                <ellipse cx="481.5" cy="355.5" rx="281.5" ry="155.5" fill="#F6F6F6"/>
+                <ellipse cx="481.5" cy="355.5" rx="281.5" ry="155.5" fill="var(--spotlight)"/>
               </g>
               <defs>
                 <filter id="hero-blur-5" x="0" y="0" width="963" height="711" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
@@ -1108,7 +1271,7 @@
             </div>
           </div>
         </div>
-        <button class="btn-primary typo-button" onclick="">Request offer</button>
+        <button class="btn-primary typo-button" onclick="navigate(7)">Request offer</button>
         <div class="uniarrow-btn" onclick="document.querySelector('.summary-building-image').scrollIntoView({behavior:'smooth',block:'start'})" style="cursor:pointer">
           <img src="assets/uniarrow-button-back.svg" alt="" />
           <img class="uniarrow-btn__front" src="assets/uniarrow-button-front.svg" alt="" />
@@ -1192,6 +1355,95 @@
       </div>
     </section>
 
+    <!-- ── Page 7: Request offer ─────────────────────────────────── -->
+    <section class="page" id="page-7">
+      <div class="offer-page">
+        <div class="offer-header">
+          <button class="btn-tertiary" onclick="navigate(6)">
+            <img src="assets/icons/arrow-left.svg" width="24" height="24" alt="" />
+            <span class="typo-body">Back to summary</span>
+          </button>
+          <h1 class="typo-h1 offer-header__title">Get your offer for Maison Lavaux</h1>
+        </div>
+
+        <div class="offer-blocks">
+          <!-- Block 1: Contact details -->
+          <div class="offer-block">
+            <h2 class="typo-h2 offer-block__title">Contact details</h2>
+            <div class="offer-form">
+              <div class="form-group">
+                <label class="typo-label">Name *</label>
+                <input class="form-input typo-body" type="text" value="Luise Leifer" />
+              </div>
+              <div class="form-group">
+                <label class="typo-label">Company</label>
+                <input class="form-input typo-body" type="text" value="Arndt Geiger Herrmann" />
+              </div>
+              <div class="form-group">
+                <label class="typo-label">Email address *</label>
+                <input class="form-input typo-body" type="email" value="leifer@agh.ch" />
+              </div>
+              <div class="form-group">
+                <label class="typo-label">Phone number *</label>
+                <input class="form-input typo-body" type="tel" value="044 488 60 60" />
+              </div>
+              <div class="form-group">
+                <label class="typo-label">Address *</label>
+                <input class="form-input typo-body" type="text" value="Mythenquai 345" />
+              </div>
+              <div class="form-row">
+                <div class="form-group form-group--zip">
+                  <label class="typo-label">Zip *</label>
+                  <input class="form-input typo-body" type="text" value="8038" />
+                </div>
+                <div class="form-group">
+                  <label class="typo-label">City *</label>
+                  <input class="form-input typo-body" type="text" value="Zürich" />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Block 2: Project details -->
+          <div class="offer-block">
+            <h2 class="typo-h2 offer-block__title">Project Details</h2>
+            <div class="offer-form">
+              <div class="checkbox-option">
+                <div class="checkbox-option__box"></div>
+                <span class="checkbox-option__label typo-body">Identical with requester's address</span>
+              </div>
+              <div class="form-group">
+                <label class="typo-label">Project's address</label>
+                <input class="form-input typo-body" type="text" value="Chemin de la Baume 45" />
+              </div>
+              <div class="form-row">
+                <div class="form-group form-group--zip">
+                  <label class="typo-label">Zip</label>
+                  <input class="form-input typo-body" type="text" value="1803" />
+                </div>
+                <div class="form-group">
+                  <label class="typo-label">City</label>
+                  <input class="form-input typo-body" type="text" value="Chardonne" />
+                </div>
+              </div>
+              <div class="checkbox-option">
+                <div class="checkbox-option__box"></div>
+                <span class="checkbox-option__label typo-body">I want to experience Schindler X8 in a showroom</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <button class="btn-primary typo-button offer-cta">Request offer</button>
+      </div>
+
+      <div class="offer-schindler">
+        <img src="assets/basics-schindler-logo.svg" alt="Schindler" />
+      </div>
+    </section>
+
+    </div><!-- /.pages-container -->
+
   </div><!-- /#app -->
 
   <!-- Fixed footer: always pinned to bottom -->
@@ -1209,15 +1461,72 @@
       { footer: 'steps',    nextLabel: 'Technical details' },
       { footer: 'steps',    nextLabel: 'Finish your Schindler X8' },
       { footer: 'summary',  nextLabel: null },
+      { footer: 'offer',    nextLabel: null },
     ];
 
     var currentIndex = 0;
     var heroObserver = null;
 
+    function crossfadeImg(el, newSrc) {
+      var overlay = document.createElement('img');
+      overlay.src = newSrc;
+      overlay.className = el.className;
+      var cs = getComputedStyle(el);
+      overlay.style.cssText = 'position:absolute;top:0;left:0;width:100%;height:100%;object-fit:' + cs.objectFit + ';object-position:' + cs.objectPosition + ';opacity:0;transition:opacity 0.35s ease;pointer-events:none;';
+      el.parentElement.style.position = 'relative';
+      el.parentElement.appendChild(overlay);
+      el.style.transition = 'opacity 0.35s ease';
+      requestAnimationFrame(function() { requestAnimationFrame(function() {
+        overlay.style.opacity = '1';
+        el.style.opacity = '0';
+      }); });
+      setTimeout(function() {
+        el.src = newSrc;
+        el.style.transition = 'none';
+        el.style.opacity = '1';
+        requestAnimationFrame(function() {
+          if (overlay.parentElement) overlay.parentElement.removeChild(overlay);
+          el.style.transition = '';
+        });
+      }, 380);
+    }
+
+    var INTERIOR_IMGS = {
+      main:      'interior-img-main',
+      panel:     'interior-img-panel',
+      corner:    'interior-img-corner',
+      handrails: 'interior-img-handrails',
+      door:      'interior-img-door',
+    };
+
+    function selectInterior(theme, optionEl) {
+      document.getElementById('interior-opt-luna').classList.remove('option-inner--selected');
+      document.getElementById('interior-opt-mineral').classList.remove('option-inner--selected');
+      optionEl.querySelector('.option-inner').classList.add('option-inner--selected');
+      document.documentElement.dataset.theme = theme === 'luna' ? '' : theme;
+
+      var imgs = Object.entries(INTERIOR_IMGS).map(function(e) {
+        return { el: document.getElementById(e[1]), key: e[0] };
+      });
+      var mirrorImg = document.getElementById('mirror-img-main');
+      imgs.forEach(function(i) {
+        crossfadeImg(i.el, 'assets/interior-' + theme + (i.key === 'main' ? '' : '-' + i.key) + '.png');
+      });
+      crossfadeImg(mirrorImg, 'assets/interior-' + theme + '.png');
+    }
+
     function navigate(index) {
       if (index < 0 || index >= PAGES.length) return;
 
-      document.getElementById('page-' + currentIndex).classList.remove('is-active');
+      if (currentIndex === 3 && index < 3) {
+        selectInterior('luna', document.querySelector('[onclick*="luna"]'));
+      }
+
+      var outEl = document.getElementById('page-' + currentIndex);
+      outEl.style.setProperty('--leave-offset', window.scrollY + 'px');
+      outEl.classList.add('is-leaving');
+      outEl.classList.remove('is-active');
+      window.scrollTo(0, 0);
 
       if (heroObserver) {
         heroObserver.disconnect();
@@ -1228,7 +1537,6 @@
       var page = PAGES[index];
       var pageEl = document.getElementById('page-' + index);
       pageEl.classList.add('is-active');
-      window.scrollTo(0, 0);
 
       var sentinel = pageEl.querySelector('.hero-sentinel');
       var hero = pageEl.querySelector('.hero');
@@ -1242,7 +1550,9 @@
         heroObserver.observe(sentinel);
       }
 
-      renderFooter(PAGES[index], index);
+      renderFooter(page, index);
+
+      setTimeout(function() { outEl.classList.remove('is-leaving'); }, 400);
     }
 
     function renderFooter(page, index) {
@@ -1277,7 +1587,7 @@
             '</button>' +
           '</div>';
 
-      } else if (page.footer === 'summary') {
+      } else if (page.footer === 'summary' || page.footer === 'offer') {
         document.getElementById('page-footer').style.display = 'none';
       }
     }
