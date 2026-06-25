@@ -15,27 +15,23 @@
       --color-red-500: #c11c1c;
 
       /* Primitives */
-      --luna-gradient-start:  #D3D1D1;
-      --luna-gradient-middle: #E8E7E7;
-      --luna-gradient-end:    #D3D1D1;
-      --luna-spotlight:       #F6F6F6;
+      --luna-gradient-dark:  #D3D1D1;
+      --luna-gradient-light: #E8E7E7;
+      --luna-spotlight:      #F6F6F6;
 
-      --mineral-gradient-start:  #B7B0A8;
-      --mineral-gradient-middle: #D0C8BF;
-      --mineral-gradient-end:    #B7B0A8;
-      --mineral-spotlight:       #EEE6DB;
+      --mineral-gradient-dark:  #B7B0A8;
+      --mineral-gradient-light: #D0C8BF;
+      --mineral-spotlight:      #EEE6DB;
 
       /* Semantics — default: Luna */
-      --gradient-start:  var(--luna-gradient-start);
-      --gradient-middle: var(--luna-gradient-middle);
-      --gradient-end:    var(--luna-gradient-end);
-      --spotlight:       var(--luna-spotlight);
+      --gradient-dark:  var(--luna-gradient-dark);
+      --gradient-light: var(--luna-gradient-light);
+      --spotlight:      var(--luna-spotlight);
     }
     [data-theme="mineral"] {
-      --gradient-start:  var(--mineral-gradient-start);
-      --gradient-middle: var(--mineral-gradient-middle);
-      --gradient-end:    var(--mineral-gradient-end);
-      --spotlight:       var(--mineral-spotlight);
+      --gradient-dark:  var(--mineral-gradient-dark);
+      --gradient-light: var(--mineral-gradient-light);
+      --spotlight:      var(--mineral-spotlight);
     }
 
     @font-face {
@@ -98,10 +94,10 @@
 
     /* ─── Background ──────────────────────────────────────────────────── */
     html {
-      background: var(--gradient-end);
+      background: var(--gradient-dark);
     }
     .app-bg {
-      background: linear-gradient(161.59deg, var(--luna-gradient-start) 1.996%, var(--luna-gradient-middle) 45.421%, var(--luna-gradient-end) 96.605%);
+      background: linear-gradient(161.59deg, var(--luna-gradient-dark) 1.996%, var(--luna-gradient-light) 45.421%, var(--luna-gradient-dark) 96.605%);
       pointer-events: none;
       overflow: hidden;
       position: relative;
@@ -111,7 +107,7 @@
       position: absolute;
       inset: 0;
       z-index: 0;
-      background: linear-gradient(161.59deg, var(--mineral-gradient-start) 1.996%, var(--mineral-gradient-middle) 45.421%, var(--mineral-gradient-end) 96.605%);
+      background: linear-gradient(161.59deg, var(--mineral-gradient-dark) 1.996%, var(--mineral-gradient-light) 45.421%, var(--mineral-gradient-dark) 96.605%);
       opacity: 0;
       transition: opacity 0.6s ease;
     }
