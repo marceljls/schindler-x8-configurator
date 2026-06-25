@@ -218,8 +218,8 @@
     }
     .img-lightbox__close {
       position: absolute;
-      top: 12px;
-      right: 12px;
+      top: 16px;
+      right: 16px;
       width: 36px;
       height: 36px;
       border-radius: 50%;
@@ -231,6 +231,76 @@
       justify-content: center;
       cursor: pointer;
       z-index: 2;
+    }
+
+    /* ─── Tech info overlay ──────────────────────────────────────────── */
+    .tech-info-lightbox {
+      position: fixed;
+      inset: 0;
+      z-index: 400;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      background: rgba(16, 16, 16, 0.2);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s ease;
+    }
+    .tech-info-lightbox.is-open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .tech-info-lightbox__overlay {
+      position: relative;
+      padding: 32px;
+      background: #fff;
+      width: 100%;
+      animation: lightbox-slide-up 0.35s ease forwards;
+    }
+    .tech-info-lightbox__close {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: white;
+      border: none;
+      padding: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      z-index: 2;
+    }
+    .tech-info-lightbox__title {
+      padding-right: 32px;
+      margin-bottom: 32px;
+    }
+    .tech-info-lightbox__rows {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .tech-info-row {
+      display: flex;
+      flex-direction: column;
+    }
+    .tech-info-row--inline {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+    .tech-info-row--inline > div {
+      display: flex;
+      flex-direction: column;
+    }
+    .tech-info-row__label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 8px;
     }
 
     /* ─── Nav drawer ─────────────────────────────────────────────────── */
@@ -1054,6 +1124,50 @@
       </div>
     </div>
 
+    <!-- Tech info overlay -->
+    <div class="tech-info-lightbox" id="tech-info-lightbox" onclick="closeTechInfoLightbox(event)">
+      <div class="tech-info-lightbox__overlay">
+        <button class="tech-info-lightbox__close" aria-label="Close" onclick="closeTechInfoLightbox()">
+          <img src="assets/icons/close.svg" alt="" width="20" height="20" />
+        </button>
+        <div class="tech-info-lightbox__title">
+          <h2 class="typo-h2">Important information and dimension ranges</h2>
+        </div>
+        <div class="tech-info-lightbox__rows">
+          <div class="tech-info-row tech-info-row--inline">
+            <div>
+              <div class="tech-info-row__label typo-label">Speed</div>
+              <div class="typo-body">1m/s</div>
+            </div>
+            <div>
+              <div class="tech-info-row__label typo-label">No. of entrances</div>
+              <div class="typo-body">1</div>
+            </div>
+          </div>
+          <div class="tech-info-row">
+            <div class="tech-info-row__label typo-label">Floor to floor height</div>
+            <div class="typo-body">max. 4000 mm</div>
+          </div>
+          <div class="tech-info-row">
+            <div class="tech-info-row__label typo-label">Hoistway dimensions</div>
+            <div class="typo-body"><span class="typo-label">Width</span> &nbsp; 1450 mm – 1950mm</div>
+            <div class="typo-body"><span class="typo-label">Depth</span> &nbsp; 1450mm – 1700mm</div>
+          </div>
+          <div class="tech-info-row">
+            <div class="tech-info-row__label typo-label">Pit depth</div>
+            <div class="typo-body">150mm</div>
+          </div>
+          <div class="tech-info-row">
+            <div class="tech-info-row__label typo-label">
+              Drywall car front
+              <img src="assets/icons/info.svg" alt="" width="16" height="16" />
+            </div>
+            <div class="typo-body">Provided by Schindler</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <!-- Nav drawer -->
     <div class="nav-backdrop" id="nav-backdrop" onclick="closeNavDrawer()"></div>
     <div class="nav-drawer" id="nav-drawer" aria-modal="true" role="dialog">
@@ -1446,7 +1560,7 @@
           </div>
         </div>
         <img class="hero-img" src="assets/technical-details.png" alt="Technical details" />
-        <button class="hero-info-btn" aria-label="Info">
+        <button class="hero-info-btn" aria-label="Info" onclick="openTechInfoLightbox()">
           <img src="assets/icons/info.svg" width="24" height="24" alt="" />
         </button>
       </div>
@@ -1887,10 +2001,27 @@
       overlay.offsetHeight; // force reflow
       overlay.style.animation = '';
       document.getElementById('img-lightbox').classList.add('is-open');
+      document.body.style.overflow = 'hidden';
     }
     function closeImgLightbox(e) {
       if (e && e.target !== document.getElementById('img-lightbox') && !e.target.closest('.img-lightbox__close')) return;
       document.getElementById('img-lightbox').classList.remove('is-open');
+      document.body.style.overflow = '';
+    }
+
+    function openTechInfoLightbox() {
+      var lb = document.getElementById('tech-info-lightbox');
+      var overlay = lb.querySelector('.tech-info-lightbox__overlay');
+      overlay.style.animation = 'none';
+      overlay.offsetHeight;
+      overlay.style.animation = '';
+      lb.classList.add('is-open');
+      document.body.style.overflow = 'hidden';
+    }
+    function closeTechInfoLightbox(e) {
+      if (e && e.target !== document.getElementById('tech-info-lightbox') && !e.target.closest('.tech-info-lightbox__close')) return;
+      document.getElementById('tech-info-lightbox').classList.remove('is-open');
+      document.body.style.overflow = '';
     }
 
     function openNavDrawer() {
