@@ -12,6 +12,7 @@
       --color-gray-25: #F7F7F7;
       --color-gray-500: #706f6f;
       --color-gray-900: #101010;
+      --color-red-500: #c11c1c;
 
       /* Primitives */
       --luna-gradient-start:  #D3D1D1;
@@ -202,8 +203,8 @@
       right: 0;
       bottom: 0;
       z-index: 201;
-      width: 320px;
-      max-width: 100vw;
+      width: 80%;
+      max-width: 480px;
       background: #fff;
       display: flex;
       flex-direction: column;
@@ -1015,11 +1016,33 @@
             </button>
           </div>
         </div>
-        <div>
-          <p class="typo-body">placeholder</p>
+        <div style="display:flex; flex-direction:column; gap:8px; align-items:flex-start;">
+          <img src="assets/design-award-logo.png" alt="iF Design Award 2026" style="height:48px; width:auto;" />
+          <img src="assets/reddot-logo.png" alt="Red Dot Winner 2026" style="height:80px; width:auto;" />
         </div>
         <div>
-          <p class="typo-body">placeholder</p>
+          <div class="form-group">
+            <label class="typo-label" style="color:var(--color-gray-500);">Select your country</label>
+            <div class="form-select-wrap">
+              <select class="form-input typo-body">
+                <option>Switzerland</option>
+                <option>Germany</option>
+                <option>Austria</option>
+              </select>
+            </div>
+          </div>
+          <div style="margin-top:32px; display:flex; align-items:flex-end; justify-content:space-between;">
+            <div style="display:flex; align-items:center; gap:8px;">
+              <span class="typo-body" style="cursor:pointer;">de</span>
+              <div style="width:1px; height:22px; background:var(--color-black);"></div>
+              <span class="typo-body" style="cursor:pointer;">fr</span>
+              <div style="width:1px; height:22px; background:var(--color-black);"></div>
+              <span class="typo-body" style="cursor:pointer;">it</span>
+              <div style="width:1px; height:22px; background:var(--color-black);"></div>
+              <span class="typo-body" style="cursor:pointer; color:var(--color-red-500);">en</span>
+            </div>
+            <span class="typo-help">© Schindler 2024</span>
+          </div>
         </div>
       </div>
     </div>
