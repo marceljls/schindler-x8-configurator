@@ -94,7 +94,6 @@
       width: 100%;
       min-height: 100dvh;
       position: relative;
-      z-index: 1;
     }
 
     /* ─── Background ──────────────────────────────────────────────────── */
@@ -183,11 +182,62 @@
       flex-shrink: 0;
     }
 
+    /* ─── Image lightbox ─────────────────────────────────────────────── */
+    .img-lightbox {
+      position: fixed;
+      inset: 0;
+      z-index: 400;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      background: rgba(16, 16, 16, 0.2);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s ease;
+    }
+    .img-lightbox.is-open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    @keyframes lightbox-slide-up {
+      from { transform: translateY(16px); opacity: 0; }
+      to   { transform: translateY(0);    opacity: 1; }
+    }
+    .img-lightbox__overlay {
+      position: relative;
+      padding: 4px;
+      background: #fff;
+      width: 100%;
+      animation: lightbox-slide-up 0.35s ease forwards;
+    }
+    .img-lightbox__img {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+    .img-lightbox__close {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: white;
+      border: none;
+      padding: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      z-index: 2;
+    }
+
     /* ─── Nav drawer ─────────────────────────────────────────────────── */
     .nav-backdrop {
       position: fixed;
       inset: 0;
-      z-index: 200;
+      z-index: 300;
       background: var(--color-gray-900);
       opacity: 0;
       pointer-events: none;
@@ -202,7 +252,7 @@
       top: 0;
       right: 0;
       bottom: 0;
-      z-index: 201;
+      z-index: 301;
       width: 80%;
       max-width: 480px;
       background: #fff;
@@ -459,7 +509,7 @@
       cursor: pointer;
     }
 
-    /* ─── Fixed footer ───────────────────────────────────────────────── */
+/* ─── Fixed footer ───────────────────────────────────────────────── */
     .page-footer {
       position: fixed;
       bottom: 0;
@@ -915,7 +965,7 @@
       display: flex;
       flex-direction: column;
       justify-content: center;
-      padding: 32px 24px 24px;
+      padding: 24px;
     }
     .confirm__title {
       display: flex;
@@ -993,6 +1043,16 @@
         </button>
       </div>
     </nav>
+
+    <!-- Image lightbox -->
+    <div class="img-lightbox" id="img-lightbox" onclick="closeImgLightbox(event)">
+      <div class="img-lightbox__overlay">
+        <img class="img-lightbox__img" id="img-lightbox-img" src="" alt="" />
+        <button class="img-lightbox__close" aria-label="Close" onclick="closeImgLightbox()">
+          <img src="assets/icons/close.svg" alt="" width="20" height="20" />
+        </button>
+      </div>
+    </div>
 
     <!-- Nav drawer -->
     <div class="nav-backdrop" id="nav-backdrop" onclick="closeNavDrawer()"></div>
@@ -1224,7 +1284,7 @@
             <img class="hero-split__main" id="interior-img-main" src="assets/interior-luna.png" alt="Luna interior" />
           </span>
           <div class="hero-split__thumbs">
-            <span class="hero-thumb-wrap"><img class="hero-thumb" id="interior-img-panel"     src="assets/interior-luna-panel.png" alt="Panel" /></span>
+            <span class="hero-thumb-wrap" style="cursor:pointer;" onclick="openImgLightbox(document.getElementById('interior-img-panel').src)"><img class="hero-thumb" id="interior-img-panel"     src="assets/interior-luna-panel.png" alt="Panel" /></span>
             <span class="hero-thumb-wrap"><img class="hero-thumb" id="interior-img-corner"    src="assets/interior-luna-corner.png" alt="Corner" /></span>
             <span class="hero-thumb-wrap"><img class="hero-thumb" id="interior-img-handrails" src="assets/interior-luna-handrails.png" alt="Handrails" /></span>
             <span class="hero-thumb-wrap"><img class="hero-thumb" id="interior-img-door"      src="assets/interior-luna-door.png" alt="Door" /></span>
@@ -1818,6 +1878,19 @@
       } else if (page.footer === 'summary' || page.footer === 'offer') {
         document.getElementById('page-footer').style.display = 'none';
       }
+    }
+
+    function openImgLightbox(src) {
+      document.getElementById('img-lightbox-img').src = src;
+      var overlay = document.querySelector('.img-lightbox__overlay');
+      overlay.style.animation = 'none';
+      overlay.offsetHeight; // force reflow
+      overlay.style.animation = '';
+      document.getElementById('img-lightbox').classList.add('is-open');
+    }
+    function closeImgLightbox(e) {
+      if (e && e.target !== document.getElementById('img-lightbox') && !e.target.closest('.img-lightbox__close')) return;
+      document.getElementById('img-lightbox').classList.remove('is-open');
     }
 
     function openNavDrawer() {
