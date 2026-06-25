@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <meta name="theme-color" content="#F6F6F6" />
+  <meta name="theme-color" content="#F7F7F7" />
   <title>Schindler X8 – Configurator</title>
   <style>
     /* ─── Color primitives ───────────────────────────────────────────── */
@@ -301,6 +301,68 @@
       align-items: center;
       gap: 8px;
       margin-bottom: 8px;
+    }
+
+    /* ─── Config number overlay ─────────────────────────────────────── */
+    .config-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 400;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      background: rgba(16, 16, 16, 0.2);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s ease;
+    }
+    .config-overlay.is-open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .config-overlay__panel {
+      position: relative;
+      padding: 32px;
+      background: #fff;
+      width: 100%;
+      animation: lightbox-slide-up 0.35s ease forwards;
+    }
+    .config-overlay__close {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: white;
+      border: none;
+      padding: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      z-index: 2;
+    }
+    .config-overlay__title {
+      padding-right: 32px;
+      margin-bottom: 32px;
+    }
+    .config-overlay__code {
+      color: var(--color-red-500);
+      letter-spacing: 0.35em;
+      margin-bottom: 24px;
+    }
+    .config-overlay__body {
+      margin-bottom: 16px;
+    }
+    .config-overlay__form-label {
+      display: block;
+      margin-bottom: 8px;
+    }
+    .config-overlay__btn {
+      margin-top: 16px;
+      width: 100%;
     }
 
     /* ─── Nav drawer ─────────────────────────────────────────────────── */
@@ -1168,6 +1230,25 @@
       </div>
     </div>
 
+    <!-- Config number overlay -->
+    <div class="config-overlay" id="config-overlay" onclick="closeConfigOverlay(event)">
+      <div class="config-overlay__panel">
+        <button class="config-overlay__close" aria-label="Close" onclick="closeConfigOverlay()">
+          <img src="assets/icons/close.svg" alt="" width="20" height="20" />
+        </button>
+        <div class="config-overlay__title">
+          <h2 class="typo-h2">Your configuration number</h2>
+        </div>
+        <div class="typo-title config-overlay__code">13L03N</div>
+        <p class="typo-body config-overlay__body">Would you like to receive the number by email?</p>
+        <div>
+          <label class="typo-label config-overlay__form-label" for="config-email">Email address*</label>
+          <input id="config-email" class="form-input typo-body" type="email" placeholder="your@email.com" />
+        </div>
+        <button class="btn-primary typo-button config-overlay__btn">Send email</button>
+      </div>
+    </div>
+
     <!-- Nav drawer -->
     <div class="nav-backdrop" id="nav-backdrop" onclick="closeNavDrawer()"></div>
     <div class="nav-drawer" id="nav-drawer" aria-modal="true" role="dialog">
@@ -1905,7 +1986,7 @@
       optionEl.querySelector('.option-inner').classList.add('option-inner--selected');
       document.documentElement.dataset.theme = theme === 'luna' ? '' : theme;
       var spotlightColors = { luna: '#F6F6F6', mineral: '#EEE6DB' };
-      document.querySelector('meta[name="theme-color"]').content = spotlightColors[theme];
+      // theme-color is intentionally kept fixed at gray-25; no dynamic update
 
       var imgs = Object.entries(INTERIOR_IMGS).map(function(e) {
         return { el: document.getElementById(e[1]), key: e[0] };
@@ -1920,7 +2001,11 @@
     function navigate(index) {
       if (index < 0 || index >= PAGES.length) return;
 
-      if (currentIndex === 3 && index < 3) {
+      var prevIndex = currentIndex;
+
+      if (index === 0 && currentIndex >= 3) {
+        selectInterior('luna', document.querySelector('[onclick*="luna"]'));
+      } else if (currentIndex === 3 && index < 3) {
         selectInterior('luna', document.querySelector('[onclick*="luna"]'));
       }
 
@@ -1953,6 +2038,10 @@
       }
 
       renderFooter(page, index);
+
+      if (page.footer === 'summary' && prevIndex < index) {
+        setTimeout(openConfigOverlay, 350);
+      }
 
       setTimeout(function() { outEl.classList.remove('is-leaving'); }, 400);
     }
@@ -2021,6 +2110,21 @@
     function closeTechInfoLightbox(e) {
       if (e && e.target !== document.getElementById('tech-info-lightbox') && !e.target.closest('.tech-info-lightbox__close')) return;
       document.getElementById('tech-info-lightbox').classList.remove('is-open');
+      document.body.style.overflow = '';
+    }
+
+    function openConfigOverlay() {
+      var el = document.getElementById('config-overlay');
+      var panel = el.querySelector('.config-overlay__panel');
+      panel.style.animation = 'none';
+      panel.offsetHeight;
+      panel.style.animation = '';
+      el.classList.add('is-open');
+      document.body.style.overflow = 'hidden';
+    }
+    function closeConfigOverlay(e) {
+      if (e && e.target !== document.getElementById('config-overlay') && !e.target.closest('.config-overlay__close')) return;
+      document.getElementById('config-overlay').classList.remove('is-open');
       document.body.style.overflow = '';
     }
 
