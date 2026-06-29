@@ -10,6 +10,7 @@
     :root {
       --color-black:   #000000;
       --color-gray-25: #F7F7F7;
+      --color-gray-300: #A9A8A8;
       --color-gray-500: #706f6f;
       --color-gray-900: #101010;
       --color-red-500: #c11c1c;
@@ -959,6 +960,14 @@
       width: 100%;
     }
     .form-select-wrap { position: relative; }
+    .form-select-wrap--disabled .form-input {
+      background: transparent;
+      color: var(--color-gray-300);
+      pointer-events: none;
+    }
+    .form-select-wrap--disabled::after {
+      opacity: 0.35;
+    }
     .form-select-wrap::after {
       content: '';
       position: absolute;
@@ -1412,19 +1421,19 @@
           <input class="form-input typo-body" type="text" value="Maison Lavaux" />
         </div>
         <div class="form-row">
-          <div class="form-group form-group--zip">
-            <label class="typo-label">Project's zip</label>
-            <input class="form-input typo-body" type="text" value="1803" />
-          </div>
           <div class="form-group">
             <label class="typo-label">Project's country</label>
-            <div class="form-select-wrap">
-              <select class="form-input typo-body">
+            <div class="form-select-wrap form-select-wrap--disabled">
+              <select class="form-input typo-body" disabled>
                 <option>Switzerland</option>
                 <option>Germany</option>
                 <option>Austria</option>
               </select>
             </div>
+          </div>
+          <div class="form-group form-group--zip">
+            <label class="typo-label">Project's zip</label>
+            <input class="form-input typo-body" type="text" value="1803" />
           </div>
         </div>
         <div class="form-group">
